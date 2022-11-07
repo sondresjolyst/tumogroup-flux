@@ -1,0 +1,28 @@
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: ${CERT_ISSUER}
+spec:
+  acme:
+    # The ACME server URL
+    server: ${ACME_URL}
+    # Email address used for ACME registration.
+    # Let's Encrypt will use this to contact you about expiring certificates and issues related to your account.
+    email: sonyslyst@gmail.com
+    # Name of a secret used to store the ACME account private key
+    privateKeySecretRef:
+      name: ${CERT_ISSUER}
+    solvers:
+    - selector:
+        dnsNames:
+        - '*.kube.tumogroup.com'
+      dns01:
+        webhook:
+          config:
+            apiKeySecretRef:
+              name: godaddy-api-key
+              key: token
+            production: true
+            ttl: 600
+          solverName: godaddy
